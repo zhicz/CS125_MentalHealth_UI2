@@ -7,15 +7,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BasicSurveyActivity extends AppCompatActivity {
     private String username;
     private  String password;
+    private String prefer;
+    private int[] scoreRubric1 = {2, 3, 4, 7, 10, 11, 12, 13, 14, 16, 17, 18, 19};
+
+    private int score = 0;
     private Map<Integer,String[]> BSQA = new HashMap<>();
-    private Map<Character, Integer> scoreRubric = new HashMap<>();
-    private char[] BSanswers = new char[25];
     private Button BSA;
     private Button BSB;
     private Button BSC;
@@ -75,7 +78,7 @@ public class BasicSurveyActivity extends AppCompatActivity {
     }
 
     private void recordBSQA(char selection){
-        BSanswers[counter] = selection;
+        update_score(selection);
         counter++;
         if(counter > 21){
             Bundle bundle = getIntent().getExtras();
@@ -85,12 +88,18 @@ public class BasicSurveyActivity extends AppCompatActivity {
             if(bundle.getString("password") != null) {
                 password = bundle.getString("password");
             }
+            String resp = null;
+            if(bundle.getString("APIResponse") != null){
+                resp = bundle.getString("APIResponse");
+            }
 
             Bundle extras = new Bundle();
             extras.putString("username",username);
             extras.putString("password",password);
             extras.putString("Activity","BasicSurvey");
-            extras.putCharArray("basicSurveyResponse",BSanswers);
+            extras.putString("APIResponse", resp);
+            extras.putString("prefer",prefer);
+            extras.putInt("basicSurveyScore",score);
             Intent dashboard = new Intent(BasicSurveyActivity.this, DashboardActivity.class);
             dashboard.putExtras(extras);
             this.finish();
@@ -138,5 +147,45 @@ public class BasicSurveyActivity extends AppCompatActivity {
         BSQA.put(19, new String[]{"Are you confused and worried about your future?","A. Often","B. Occasionally","C. Rarely","D. No"});
         BSQA.put(20, new String[]{"Who will you help first when you are under pressure?","A. Family","B. Friends","C. Other","D. No one"});
         BSQA.put(21, new String[]{"How do you deal with stress?","A. Listening to music","B. Watch videos","C. Talking with friend","D. other"});
+    }
+
+    private void update_score(char selection){
+        if(Arrays.asList(scoreRubric1).contains(counter)) {
+            if(selection == 'A'){
+                score += 3;
+            } else if(selection == 'B') {
+                score += 2;
+            } else if(selection == 'C'){
+                score += 1;
+            }
+        }else if(counter == 1 || counter == 5) {
+            if(selection == 'A'){
+                score += 2;
+            } else if(selection == 'B') {
+                score += 1;
+            }
+        }else if(counter == 6 || counter == 8 || counter == 9) {
+            if(selection == 'A'){
+                score -= 1;
+            } else if(selection == 'D') {
+                score += 2;
+            } else if(selection == 'C'){
+                score += 1;
+            } else if(selection == 'E'){
+                score += 3;
+            }
+        } else if(counter == 20 && selection == 'D')
+        {
+            score += 2;
+        } else if(counter == 21)
+        {
+            if(selection == 'A'){
+                prefer = "music";
+            }else if(selection == 'B'){
+                prefer = "video";
+            }else{
+                prefer = "";
+            }
+        }
     }
 }

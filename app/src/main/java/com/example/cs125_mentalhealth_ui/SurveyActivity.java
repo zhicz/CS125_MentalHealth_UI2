@@ -13,13 +13,13 @@ import java.util.Map;
 
 public class SurveyActivity extends AppCompatActivity {
     private Map<Integer,String[]> QA = new HashMap<>();
-    private char[] answers = new char[10];
     private Button selectA;
     private Button selectB;
     private Button selectC;
     private Button selectD;
     private TextView question;
     private int counter = 1;
+    private int score = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +66,17 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     private void record(char newAnswer){
-        answers[counter] = newAnswer;
+        if(newAnswer == 'B'){
+            score += 1;
+        }else if(newAnswer == 'C'){
+            score += 2;
+        } else if(newAnswer == 'D'){
+            score += 3;
+        }
         counter++;
         if (counter > 6)
         {
-            setResult(Activity.RESULT_OK, new Intent().putExtra("answers",answers));
+            setResult(Activity.RESULT_OK, new Intent().putExtra("answers",score));
             this.finish();
         }else{
             question.setText(QA.get(counter)[0]);

@@ -60,10 +60,14 @@ public class MainActivity extends AppCompatActivity {
         if(checkLogin.connect_api(name,userPassword, "/user/login","Auth successful")){
             Intent dashboard = new Intent(MainActivity.this, DashboardActivity.class);
             invalidText.setVisibility(View.INVISIBLE);
+
+            String resp = checkLogin.get_resp();
+
             Bundle extras = new Bundle();
             extras.putString("username",name);
             extras.putString("password",userPassword);
             extras.putString("Activity","SignIn");
+            extras.putString("APIResponse", resp);
             dashboard.putExtras(extras);
             startActivity(dashboard);
         }
