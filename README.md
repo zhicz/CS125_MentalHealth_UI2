@@ -2,7 +2,7 @@
 # HealthCare_App
 
 This Project was created for my CS125 project class. It was built for healthcare data management.
-* [Healthcar_App](https://github.com/lYesterdaYl/HealthCare_App/) - Database and recommendation
+* [HealthCare_App](https://github.com/lYesterdaYl/HealthCare_App/) - Database and recommendation
 ## Author
 
 * [Zhiyuan Du](https://github.com/lYesterdaYl)
